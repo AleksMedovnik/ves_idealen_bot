@@ -8,8 +8,11 @@ state = {
     'label': '',
     'result': 0,
     'gender': '',
+    'koef': 0,
     'height': 0,
     'weight': 0.0,
+    'athlet': False,
+    'body_mass_index': 0,
 }
 
 @bot.message_handler(commands=['start'])
@@ -46,7 +49,7 @@ def bot_message(message):
         set_height(state, bot, message)
 
     elif state['label'] == 'weight':
-        say_result(state, bot, message)
+        set_weight(types, state, bot, message)
 
 
 bot.polling(none_stop=True)
