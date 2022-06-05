@@ -1,14 +1,3 @@
-def build_menu(buttons, n_cols,
-               header_buttons=None,
-               footer_buttons=None):
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
-    if header_buttons:
-        menu.insert(0, [header_buttons])
-    if footer_buttons:
-        menu.append([footer_buttons])
-    return menu
-
-
 def int_r(num):
     num = int(num + (0.5 if num > 0 else -0.5))
     return num
@@ -60,15 +49,14 @@ def set_height(state, bot, message):
         bot.send_message(message.chat.id, 'Укажите правильный рост в сантиметрах!')
 
 
-def set_weight(types, state, bot, message):
+def set_weight(types, markup, state, bot, message):
     try:
         state['weight'] = int(message.text.lower())
-        state['label'] = 'test-athlet'
-        button_list = [
-            types.InlineKeyboardButton(text='Да', callback_data='1'),
-            types.InlineKeyboardButton(text='Нет', callback_data='0'),
-        ]
-        markup = types.InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
+        state['label'] = 'athlet'
+        markup.add(
+            types.KeyboardButton('Да'),
+            types.KeyboardButton('Нет'),
+        )
         bot.send_message(
             message.chat.id,
             'Имеете ли Вы большую мышечную массу?',
@@ -77,13 +65,32 @@ def set_weight(types, state, bot, message):
     except:
         bot.send_message(message.chat.id, 'Укажите правильный вес в кг!')
 
-def test_athlet(state, bot, message):
+
+def test_athlet(state, bot, keyboard_none, message):
     try:
-        state['athlet'] = int(message.text)
-        state['label'] = 'weight'
-        bot.send_message(message.chat.id, 'Укажите Ваш вес в кг!')
+        new_message = 'Укажите свой полный возраст!'
+        if message.text.lower() == 'да':
+            state['athlet'] = True
+            state['label'] = 'age'
+            bot.send_message(message.chat.id, new_message, reply_markup=keyboard_none)
+        elif message.text.lower() == 'нет':
+            state['athlet'] = False
+            state['label'] = 'age'
+            bot.send_message(message.chat.id, new_message, reply_markup=keyboard_none)
     except:
-        bot.send_message(message.chat.id, 'Укажите правильный рост в метрах (например, 1.72)!')
+        bot.send_message(message.chat.id, 'Укажите правильный ответ!')
+
+
+def set_age(state, bot, message):
+    try:
+        state['age'] = int(message.text)
+        state['label'] = 'end'
+        bot.send_message(
+            message.chat.id,
+            'Все понятно!'
+        )
+    except:
+        bot.send_message(message.chat.id, 'Укажите правильный возраст!')
 
 
 def say_result(state, bot, message):

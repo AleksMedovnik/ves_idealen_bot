@@ -7,12 +7,13 @@ bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
 state = {
     'label': '',
     'result': 0,
+    'body_mass_index': 0,
     'gender': '',
     'koef': 0,
     'height': 0,
     'weight': 0.0,
     'athlet': False,
-    'body_mass_index': 0,
+    'age': 0,
 }
 
 @bot.message_handler(commands=['start'])
@@ -49,7 +50,13 @@ def bot_message(message):
         set_height(state, bot, message)
 
     elif state['label'] == 'weight':
-        set_weight(types, state, bot, message)
+        set_weight(types, markup, state, bot, message)
+
+    elif state['label'] == 'athlet':
+        test_athlet(state, bot,keyboard_none, message)
+
+    elif state['label'] == 'age':
+        set_age(state, bot, message)
 
 
 bot.polling(none_stop=True)
