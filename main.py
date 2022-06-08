@@ -1,20 +1,31 @@
 import telebot
 from telebot import types
-from functions import *
+from functions import \
+    select_option, \
+    set_gender, \
+    set_height, \
+    set_weight, \
+    set_age, \
+    restart
 
 bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
+
 
 state = {
     'label': '',
     'result': 0,
     'body_mass_index': 0,
+    'max_normal_weight': 0,
+    'coefs': {
+        'coef_gender': 0,
+        'coef_age': 0,
+    },
     'gender': '',
-    'koef': 0,
     'height': 0,
     'weight': 0.0,
-    'athlet': False,
     'age': 0,
 }
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -50,13 +61,13 @@ def bot_message(message):
         set_height(state, bot, message)
 
     elif state['label'] == 'weight':
-        set_weight(types, markup, state, bot, message)
-
-    elif state['label'] == 'athlet':
-        test_athlet(state, bot,keyboard_none, message)
+        set_weight(keyboard_none, state, bot, message)
 
     elif state['label'] == 'age':
-        set_age(state, bot, message)
+        set_age(types, markup, state, bot, message)
+
+    elif state['label'] == 'end':
+        restart(state, message, bot, types, markup)
 
 
 bot.polling(none_stop=True)
