@@ -4,21 +4,19 @@ def int_r(num):
 
 
 def calculate_mass(state):
-    coef_height = (state['height'] / 100) ** 2
-    state['body_mass_index'] = state['weight'] / coef_height
-    state['coefs']['coef_gender'] = (1 if state['gender'] == 'man' else 0)
-    state['coefs']['coef_age'] = (0.5 if state['age'] > 60 else 0)
-    coef_gender = state['coefs']['coef_gender']
-    coef_age = state['coefs']['coef_age']
-    state['max_normal_weight'] = 25 + coef_gender + coef_age
+    coef_height = (state.height / 100) ** 2
+    state.body_mass_index = state.weight / coef_height
+    state.coefs['coef_gender'] = (1 if state.gender == 'man' else 0)
+    state.coefs['coef_age'] = (0.5 if state.age > 60 else 0)
+    state.max_normal_weight = 25 + state.coefs['coef_gender'] + state.coefs['coef_age']
 
-    if state['body_mass_index'] < 18.5:
-        result = 18.5 * coef_height - state['weight']
+    if state.body_mass_index < 18.5:
+        result = 18.5 * coef_height - state.weight
         return f'Тебе нужно набрать {int_r(result)} кг!'
-    elif (state['body_mass_index'] >= 18.5) and (state['body_mass_index'] <= state['max_normal_weight']):
+    elif (state.body_mass_index >= 18.5) and (state.body_mass_index <= state.max_normal_weight):
         return 'У тебя нормальный вес!'
-    elif state['body_mass_index'] > state['max_normal_weight']:
-        result = state['weight'] - state['max_normal_weight'] * coef_height
+    elif state.body_mass_index > state.max_normal_weight:
+        result = state.weight - state.max_normal_weight * coef_height
         return f'Тебе нужно сбросить {int_r(result)} кг!'
 
 
@@ -28,14 +26,14 @@ def select_option(state, bot, types, message, markup):
             types.KeyboardButton('Мужской'),
             types.KeyboardButton('Женский'),
         )
-        state['label'] = 'gender'
+        state.label = 'gender'
         bot.send_message(message.chat.id, 'Укажите Ваш пол!', reply_markup=markup)
     elif message.text == 'Хочу похудеть!':
         markup.add(
             types.KeyboardButton('Правила'),
             types.KeyboardButton('Controller'),
         )
-        state['label'] = 'start_losing_weight'
+        state.label = 'start_losing_weight'
         bot.send_message(
             message.chat.id,
             'Ознакомьтесь с правилами и перейдите в программу Controller!',
@@ -48,7 +46,7 @@ def select_option(state, bot, types, message, markup):
 def start_losing_weight(state, message, bot, types, markup):
     try:
         if message.text == 'Правила':
-            state['label'] = 'rules'
+            state.label = 'rules'
             markup.add(
                 types.KeyboardButton('Controller'),
                 types.KeyboardButton('В основное меню!')
@@ -59,7 +57,7 @@ def start_losing_weight(state, message, bot, types, markup):
 
 Каждое утро, примерно в одно и то же время, их необходимо устанавливать в одно и то же место на полу (это важно!), после чего, производить взвешивание.
 Делать выводы самостоятельно не нужно, поскольку, ежедневное взвешивание в “чистом виде” не дает точных результатов. Оно необходимо для более длительного мониторинга.
-Всё, что Вам нужно, это вносить показания весов в Контроллер.
+Всё, что Вам нужно, это вносить показания весов в Controller.
 Я, в свою очередь, буду корректировать Вас на протяжении всего курса похудения!
 ''',
                 reply_markup=markup
@@ -71,12 +69,12 @@ def start_losing_weight(state, message, bot, types, markup):
 def set_gender(state, bot, keyboard_none, message):
     new_message = 'Укажите Ваш рост в см!'
     if message.text.lower() == 'мужской':
-        state['label'] = 'height'
-        state['gender'] = 'man'
+        state.label = 'height'
+        state.gender = 'man'
         bot.send_message(message.chat.id, new_message, reply_markup=keyboard_none)
     elif message.text.lower() == 'женский':
-        state['label'] = 'height'
-        state['gender'] = 'wooman'
+        state.label = 'height'
+        state.gender = 'wooman'
         bot.send_message(message.chat.id, new_message, reply_markup=keyboard_none)
     else:
         bot.send_message(message.chat.id, 'Выбери подходящий ответ ниже!')
@@ -84,8 +82,8 @@ def set_gender(state, bot, keyboard_none, message):
 
 def set_height(state, bot, message):
     try:
-        state['height'] = int(message.text.lower())
-        state['label'] = 'weight'
+        state.height = int(message.text.lower())
+        state.label = 'weight'
         bot.send_message(message.chat.id, 'Укажите Ваш вес в кг (округлённый)!')
     except:
         bot.send_message(message.chat.id, 'Укажите правильный рост в сантиметрах!')
@@ -93,8 +91,8 @@ def set_height(state, bot, message):
 
 def set_weight(keyboard_none, state, bot, message):
     try:
-        state['weight'] = int(message.text.lower())
-        state['label'] = 'age'
+        state.weight = int(message.text.lower())
+        state.label = 'age'
         bot.send_message(
             message.chat.id,
             'Укажите свой возраст!',
@@ -106,8 +104,8 @@ def set_weight(keyboard_none, state, bot, message):
 
 def set_age(types, markup, state, bot, message):
     try:
-        state['age'] = int(message.text)
-        state['label'] = 'end'
+        state.age = int(message.text)
+        state.label = 'end'
         markup.add(
             types.KeyboardButton('В основное меню!'),
         )
@@ -123,7 +121,7 @@ def set_age(types, markup, state, bot, message):
 def restart(state, message, bot, types, markup):
     try:
         if message.text.lower() == 'в основное меню!':
-            state['label'] = 'start'
+            state.label = 'start'
             markup.add(
                 types.KeyboardButton('Хочу похудеть!'),
                 types.KeyboardButton('Хочу узнать, сколько мне нужно сбросить!')
