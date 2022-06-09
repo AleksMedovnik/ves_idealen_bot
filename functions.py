@@ -30,6 +30,42 @@ def select_option(state, bot, types, message, markup):
         )
         state['label'] = 'gender'
         bot.send_message(message.chat.id, 'Укажите Ваш пол!', reply_markup=markup)
+    elif message.text == 'Хочу похудеть!':
+        markup.add(
+            types.KeyboardButton('Правила'),
+            types.KeyboardButton('Controller'),
+        )
+        state['label'] = 'start_losing_weight'
+        bot.send_message(
+            message.chat.id,
+            'Ознакомьтесь с правилами и перейдите в программу Controller!',
+            reply_markup=markup
+        )
+    else:
+        bot.send_message(message.chat.id, 'Выберите вариант ниже!')
+
+
+def start_losing_weight(state, message, bot, types, markup):
+    try:
+        if message.text == 'Правила':
+            state['label'] = 'rules'
+            markup.add(
+                types.KeyboardButton('Controller'),
+                types.KeyboardButton('В основное меню!')
+            )
+            bot.send_message(
+                message.chat.id,
+                '''Для похудения нам понадобятся напольные весы.
+
+Каждое утро, примерно в одно и то же время, их необходимо устанавливать в одно и то же место на полу (это важно!), после чего, производить взвешивание.
+Делать выводы самостоятельно не нужно, поскольку, ежедневное взвешивание в “чистом виде” не дает точных результатов. Оно необходимо для более длительного мониторинга.
+Всё, что Вам нужно, это вносить показания весов в Контроллер.
+Я, в свою очередь, буду корректировать Вас на протяжении всего курса похудения!
+''',
+                reply_markup=markup
+            )
+    except:
+        bot.send_message(message.chat.id, 'Выберите подходящий вариант!')
 
 
 def set_gender(state, bot, keyboard_none, message):

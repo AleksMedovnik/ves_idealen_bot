@@ -6,7 +6,8 @@ from functions import \
     set_height, \
     set_weight, \
     set_age, \
-    restart
+    restart, \
+    start_losing_weight
 
 bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
 
@@ -68,6 +69,9 @@ def bot_message(message):
 
     elif state['label'] == 'end':
         restart(state, message, bot, types, markup)
+
+    elif state['label'] == 'start_losing_weight':
+        start_losing_weight(state, message, bot, types, markup)
 
 
 bot.polling(none_stop=True)
