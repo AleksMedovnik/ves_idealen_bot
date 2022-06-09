@@ -7,7 +7,8 @@ from menu import \
     set_weight, \
     set_age, \
     restart, \
-    start_losing_weight
+    start_losing_weight, s
+from controller import start_controller
 
 bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
 
@@ -21,6 +22,7 @@ class State:
     height = 0
     weight = 0.0
     age = 0
+    indicators = []
 
 state = State()
 
@@ -69,6 +71,12 @@ def bot_message(message):
 
     elif state.label == 'start_losing_weight':
         start_losing_weight(state, message, bot, types, markup)
+
+    elif state.label == 'start_controller':
+        start_controller(keyboard_none, state, message, bot)
+
+    elif state.label == 'rules':
+        s(state, message, bot, types, markup)
 
 
 bot.polling(none_stop=True)

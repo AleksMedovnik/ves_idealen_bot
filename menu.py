@@ -44,23 +44,59 @@ def select_option(state, bot, types, message, markup):
 
 
 def start_losing_weight(state, message, bot, types, markup):
-    try:
-        if message.text == 'Правила':
-            state.label = 'rules'
-            markup.add(
-                types.KeyboardButton('Controller'),
-                types.KeyboardButton('В основное меню!')
-            )
-            f = open('data/rules.txt', 'r', encoding='UTF-8')
-            rules = f.read()
-            f.close()
-            bot.send_message(
-                message.chat.id,
-                rules,
-                reply_markup=markup
-            )
-    except:
+    if message.text == 'Правила':
+        state.label = 'rules'
+        markup.add(
+            types.KeyboardButton('Controller'),
+            types.KeyboardButton('В основное меню!')
+        )
+        f = open('text/rules.txt', 'r', encoding='UTF-8')
+        rules = f.read()
+        f.close()
+        bot.send_message(
+            message.chat.id,
+            rules,
+            reply_markup=markup
+        )
+    elif message.text == 'Controller':
+        state.label = 'start_controller'
+        markup.add(
+            types.KeyboardButton('Начать!')
+        )
+        bot.send_message(
+            message.chat.id,
+            'Если Вы внимательно ознакомились с правилами, то нажмите на кнопку "Начать"',
+            reply_markup=markup
+        )
+    else:
         bot.send_message(message.chat.id, 'Выберите подходящий вариант!')
+
+
+def s(state, message, bot, types, markup):
+    if message.text == 'В основное меню!':
+        state.label = 'start'
+        markup.add(
+            types.KeyboardButton('Хочу похудеть!'),
+            types.KeyboardButton('Хочу узнать, сколько мне нужно сбросить!')
+        )
+        bot.send_message(
+            message.chat.id,
+            'Удачи!',
+            reply_markup=markup
+        )
+    elif message.text == 'Controller':
+        state.label = 'start_controller'
+        markup.add(
+            types.KeyboardButton('Начать!')
+        )
+        bot.send_message(
+            message.chat.id,
+            'Если Вы внимательно ознакомились с правилами, то нажмите на кнопку "Начать"',
+            reply_markup=markup
+        )
+    else:
+        bot.send_message(message.chat.id, 'Выберите подходящий вариант!')
+
 
 
 def set_gender(state, bot, keyboard_none, message):
