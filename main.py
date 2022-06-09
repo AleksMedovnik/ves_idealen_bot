@@ -22,7 +22,6 @@ class State:
     weight = 0.0
     age = 0
 
-
 state = State()
 
 
