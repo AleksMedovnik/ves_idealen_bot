@@ -7,7 +7,9 @@ from menu import \
     set_weight, \
     set_age, \
     restart, \
-    start_losing_weight, s
+    start_losing_weight, \
+    back_options, \
+    show_first_options
 from controller import start_controller
 
 bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
@@ -30,11 +32,7 @@ state = State()
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = types.KeyboardButton('Хочу похудеть!')
-    item2 = types.KeyboardButton('Хочу узнать, сколько мне нужно сбросить!')
-
-    markup.add(item1, item2)
-    state.label = 'start'
+    show_first_options(state, markup, types)
     bot.send_message(
         message.chat.id,
         f'''Привет, {message.from_user.first_name} {message.from_user.last_name}! 
@@ -76,7 +74,7 @@ def bot_message(message):
         start_controller(keyboard_none, state, message, bot)
 
     elif state.label == 'rules':
-        s(state, message, bot, types, markup)
+        back_options(state, message, bot, types, markup)
 
 
 bot.polling(none_stop=True)

@@ -3,6 +3,14 @@ def int_r(num):
     return num
 
 
+def show_first_options(state, markup, types):
+    state.label = 'start'
+    markup.add(
+        types.KeyboardButton('Хочу похудеть!'),
+        types.KeyboardButton('Хочу узнать, сколько мне нужно сбросить!')
+    )
+
+
 def calculate_mass(state):
     coef_height = (state.height / 100) ** 2
     state.body_mass_index = state.weight / coef_height
@@ -72,13 +80,9 @@ def start_losing_weight(state, message, bot, types, markup):
         bot.send_message(message.chat.id, 'Выберите подходящий вариант!')
 
 
-def s(state, message, bot, types, markup):
+def back_options(state, message, bot, types, markup):
     if message.text == 'В основное меню!':
-        state.label = 'start'
-        markup.add(
-            types.KeyboardButton('Хочу похудеть!'),
-            types.KeyboardButton('Хочу узнать, сколько мне нужно сбросить!')
-        )
+        show_first_options(state, markup, types)
         bot.send_message(
             message.chat.id,
             'Удачи!',
