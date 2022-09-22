@@ -12,7 +12,7 @@ from menu import \
     show_first_options
 from controller import start_controller
 
-bot = telebot.TeleBot('5332131635:AAEv9FtOmTZY8TiZmLJ2xqa3MsEdZwz94AA')
+bot = telebot.TeleBot('...')
 
 class State:
     label = 0
